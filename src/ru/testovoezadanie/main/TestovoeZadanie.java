@@ -9,7 +9,7 @@ public class TestovoeZadanie {
 
     public static void main(String[] args) {
         // Создать пустой массив для сортировки по ключу
-        Map<Character, SortedSet<String>> gruppySlov = new TreeMap<>();
+        Map<Character, Set<String>> gruppySlov = new TreeMap<>();
         // Разбить строку на массив слов
         String[] slova = stroka.toLowerCase().split(" ");
         // Для каждого слова в массиве
@@ -17,7 +17,8 @@ public class TestovoeZadanie {
             // Взять первую букву слова в качестве ключа
             char key = slovo.charAt(0);
             // Создать коллекцию для сортировки значений в ключе пл алфавиту
-            SortedSet<String> value = new TreeSet<>();
+            Comparator<String> sravnitel = (o1,o2) -> o2.length() - o1.length();
+            Set<String> value = new TreeSet<String>(sravnitel);
             // Если в массив мы уже записали этот ключ ранее
             if(gruppySlov.containsKey(key)){
                 // То извлекаем значение этого ключа
@@ -28,36 +29,7 @@ public class TestovoeZadanie {
             // Обновляем ключ массива со значением
             gruppySlov.put(key, value);
         }
-        // Теперь обрабатываем полученный массив по заданным критериям
-        Map<Character, List<String>> obrabotannyeGruppySlov = new TreeMap<>();
-        for(Map.Entry<Character, SortedSet<String>> e : gruppySlov.entrySet()){
-            SortedSet<String> v = e.getValue();
-            List<String> gruppa = new ArrayList<>();
-            for(String s : v){
-                gruppa.add(s);
-            }
-            // Оставляем если больше одного слова в ключе
-            if (gruppa.size()>1){
-                // Пишем свой сортировщик по убывающей длинне слов
-                Collections.sort(gruppa, new Comparator<String>() {
-                    @Override
-                    public int compare(String o1, String o2) {
-                        return (o2.length() - o1.length());
-                    }
-                });
-                // И записываем в новый массив результат
-                obrabotannyeGruppySlov.put(e.getKey(),gruppa);
-            }
-        }
-
-
         // Демонстрация результата
-        for(Map.Entry<Character, List<String>> e : obrabotannyeGruppySlov.entrySet()){
-            System.out.println("\n");
-            for (String s : e.getValue()){
-                System.out.print(s+" ");
-            }
-
-        }
+        System.out.println(gruppySlov.toString());
     }
 }
